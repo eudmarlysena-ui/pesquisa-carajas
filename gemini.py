@@ -52,14 +52,13 @@ with st.form(key="form_carajas", clear_on_submit=True):
     resp_input = st.text_area("Em que ocasião é utilizado o diagnóstico Equipamento desconfigurado?", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
 
-# 4. Lógica de Envio
-# 4. Lógica de Envio Blindada (Append Real)
+# 4. Lógica de Envio Otimizada para 2026
 if botao_enviar:
     if nome_input and resp_input:
         with st.spinner("Enviando para a planilha..."):
             url = "https://docs.google.com/spreadsheets/d/1zFbwwSJNZPTXQ9fB5nUfN7BmeOay492QzStB6IIs7M8/edit"
             
-            # 1. Cria o DataFrame com a nova resposta
+            # Criamos a nova linha exatamente na ordem da sua planilha
             nova_linha = pd.DataFrame([{
                 "Nome": nome_input, 
                 "Categoria": cat_input, 
@@ -68,25 +67,16 @@ if botao_enviar:
             }])
 
             try:
-                # 2. Lê os dados existentes (ttl=0 ignora o cache)
-                df_atual = conn.read(spreadsheet=url, ttl=0)
-                
-                # 3. Limpeza Crucial: remove linhas onde o 'Nome' está vazio
-                # Isso remove as linhas vazias que você viu no print da planilha (linhas 2 a 10)
-                df_atual = df_atual.dropna(subset=["Nome"])
-                
-                # 4. Junta os dados antigos com a nova linha
-                df_final = pd.concat([df_atual, nova_linha], ignore_index=True)
-                
-                # 5. Atualiza a planilha completa
-                conn.update(spreadsheet=url, data=df_final)
+                # O método 'append' é o mais estável para formulários técnicos
+                # Ele ignora se há linhas vazias no meio da planilha
+                conn.append(spreadsheet=url, data=nova_linha)
                 
                 st.balloons()
                 st.success("✅ Resposta salva com sucesso!")
             except Exception as e:
-                st.error("Erro ao salvar. Verifique se as colunas na Linha 1 da planilha são exatamente: Nome, Categoria, Resposta, Data")
+                st.error("Erro técnico: Verifique se o e-mail da conta de serviço tem permissão de 'Editor' na planilha.")
     else:
-        st.error("⚠️ Por favor, preencha todos os campos.")
+        st.error("⚠️ Por favor, preencha todos os campos antes de enviar.")
 
 # 5. Imagem da Equipe com o novo parâmetro 'width'
 # Substituindo use_container_width=True por width='stretch'
