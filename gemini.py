@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
+import os
 
 # 1. Configuração da página
 st.set_page_config(page_title="Soluções - Equipe Técnica", page_icon="🔵", layout="centered")
@@ -51,13 +52,12 @@ with st.form(key="form_carajas", clear_on_submit=True):
     resp_input = st.text_area("Em que ocasião é utilizado o diagnóstico Equipamento desconfigurado?", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
 
-# 4. Lógica de Envio Ajustada
+# 4. Lógica de Envio
 if botao_enviar:
     if nome_input and resp_input:
         with st.spinner("Enviando para a planilha..."):
             url = "https://docs.google.com/spreadsheets/d/1zFbwwSJNZPTXQ9fB5nUfN7BmeOay492QzStB6IIs7M8/edit"
             
-            # Criamos o DataFrame com a ordem EXATA das suas colunas (A, B, C, D)
             nova_linha = pd.DataFrame([{
                 "Nome": nome_input, 
                 "Categoria": cat_input, 
@@ -66,25 +66,20 @@ if botao_enviar:
             }])
 
             try:
-                # PASSO 1: Lê o que já existe (ttl=0 para não usar cache)
                 df_atual = conn.read(spreadsheet=url, ttl=0)
-                
-                # PASSO 2: Remove linhas totalmente vazias que o Google Sheets costuma enviar
                 df_atual = df_atual.dropna(how='all')
-                
-                # PASSO 3: Junta com a nova resposta
                 df_final = pd.concat([df_atual, nova_linha], ignore_index=True)
-                
-                # PASSO 4: Atualiza a planilha (index=False remove a coluna de números do Pandas)
                 conn.update(spreadsheet=url, data=df_final)
                 
                 st.balloons()
                 st.success("✅ Resposta salva com sucesso!")
             except Exception as e:
-                st.error("Erro técnico ao salvar. Verifique se o cabeçalho na Linha 1 é: Nome, Categoria, Resposta, Data")
+                st.error("Erro técnico ao salvar. Verifique o cabeçalho: Nome, Categoria, Resposta, Data")
     else:
         st.error("⚠️ Por favor, preencha todos os campos.")
 
 st.write("---")
-# Legenda em azul configurada no CSS acima
-st.image("equipe.jpg", use_container_width=True, caption="Equipe CarajásNet - Agentes de Fidelização")
+
+# 5. Imagem da Equipe com o novo parâmetro 'width'
+# Substituindo use_container_width=True por width='stretch'
+st.image("Equipe Carajás.jpg", width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
