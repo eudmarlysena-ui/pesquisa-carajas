@@ -13,7 +13,7 @@ st.markdown("""
         background-color: #4c4c4c;
     }
     [data-testid="stForm"] {
-        background-color: #F0F8FF;
+        background-color: #4c4c4c;
         border: 2px solid #0056b3;
         border-radius: 15px;
         padding: 20px;
@@ -51,9 +51,9 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col1:
         nome = st.text_input("NOME COMPLETO", placeholder="Digite seu nome completo")
     with col2:
-        categoria = st.selectbox("TIPO DE CONTATO", ["Sugestão", "Dica", "Elogio", "Outros"])
+        categoria = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Dica",])
     
-    resposta = st.text_area("SUA MENSAGEM", height=120, placeholder="Escreva aqui...")
+    resposta = st.text_area("Em que ocasião é utilizado o diagnóstico *Equipamento desconfigurado", height=150, placeholder="Escreva aqui...")
     
     botao_enviar = st.form_submit_button("ENVIAR")
 
