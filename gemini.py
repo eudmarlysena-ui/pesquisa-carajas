@@ -72,7 +72,7 @@ else:
 
 # 7. Painel de Resumo das Respostas (Dashboard)
 st.write("---")
-st.subheader("📊 Resumo de Atendimentos")
+st.subheader("📊 Resumo da Colaboração")
 
 try:
     # Lê os dados mais recentes da planilha
