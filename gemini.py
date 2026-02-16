@@ -82,4 +82,4 @@ st.write("---")
 
 # 5. Imagem da Equipe com o novo parâmetro 'width'
 # Substituindo use_container_width=True por width='stretch'
-st.image("Equipe Carajás.jpg", width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
+st.image("equipe.jpg", width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
