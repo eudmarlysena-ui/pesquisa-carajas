@@ -71,35 +71,41 @@ else:
     st.info("Carregando imagem da equipe...")
 
 # 7. Painel de Resumo das Respostas (Dashboard)
+# 7. Painel de Resumo das Respostas (Dashboard)
 st.write("---")
 st.subheader("📊 Resumo da Colaboração")
 
 try:
-    # Lê os dados mais recentes da planilha
+    # Lê os dados mais recentes da planilha (ttl=0 força a leitura sem cache)
     df_resumo = conn.read(spreadsheet=url, ttl=0)
     
+    # Limpa linhas vazias que podem atrapalhar a contagem
+    df_resumo = df_resumo.dropna(subset=['Categoria'])
+    
     if not df_resumo.empty:
-        # 1. Gráfico por Categoria
-        contagem_categorias = df_resumo['Categoria'].value_counts()
-        
-        col_graf1, col_graf2 = st.columns(2)
+        col_graf1, col_graf2 = st.columns([2, 1])
         
         with col_graf1:
-            st.write("**Distribuição por Tipo**")
-            # Cria um gráfico de barras simples e elegante
-            st.bar_chart(contagem_categorias, color="#00bfff")
+            st.write("**Distribuição por Tipo de Contato**")
+            # Conta as ocorrências de cada categoria (Resposta, Sugestão, etc)
+            contagem = df_resumo['Categoria'].value_counts()
+            st.bar_chart(contagem, color="#00bfff")
             
         with col_graf2:
-            st.write("**Total de Registros**")
-            total = len(df_resumo)
-            st.metric(label="Mensagens Recebidas", value=total, delta=f"+ {len(nova_linha)}" if botao_enviar else None)
+            st.write("**Engajamento**")
+            total_mensagens = len(df_resumo)
+            st.metric(label="Total de Feedbacks", value=total_mensagens)
             
-        # 2. Tabela de Últimas Respostas (opcional, para visualização rápida)
-        with st.expander("Ver últimas mensagens recebidas"):
-            st.dataframe(df_resumo.tail(5)[['Data', 'Nome', 'Categoria']], use_container_width=True)
+            # Exibe quem foi o último a colaborar
+            ultimo_nome = df_resumo['Nome'].iloc[-1]
+            st.caption(f"Última colaboração: {ultimo_nome}")
+
+        # Tabela expansível com o histórico
+        with st.expander("📄 Ver histórico completo de mensagens"):
+            st.dataframe(df_resumo[['Data', 'Nome', 'Categoria', 'Resposta']], width='stretch')
             
     else:
-        st.info("Ainda não há dados suficientes para gerar o resumo.")
+        st.info("O resumo aparecerá aqui assim que os dados da planilha forem carregados.")
 
 except Exception as e:
-    st.write("O resumo será exibido assim que os primeiros dados forem processados.")
+    st.warning("Aguardando sincronização com a planilha para gerar os gráficos.")
