@@ -82,4 +82,4 @@ if botao_enviar:
 
 # 5. Imagem da Equipe com o novo parâmetro 'width'
 # Substituindo use_container_width=True por width='stretch'
-st.image("equipe.jpg", width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
+st.image(imagem_pil, width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
