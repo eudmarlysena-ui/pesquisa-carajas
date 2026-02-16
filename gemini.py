@@ -53,12 +53,13 @@ with st.form(key="form_carajas", clear_on_submit=True):
     botao_enviar = st.form_submit_button("ENVIAR")
 
 # 4. Lógica de Envio Otimizada para 2026
+# 4. Lógica de Envio (Método Append Direto)
 if botao_enviar:
     if nome_input and resp_input:
-        with st.spinner("Enviando para a planilha..."):
+        with st.spinner("Gravando na planilha..."):
             url = "https://docs.google.com/spreadsheets/d/1zFbwwSJNZPTXQ9fB5nUfN7BmeOay492QzStB6IIs7M8/edit"
             
-            # Criamos a nova linha exatamente na ordem da sua planilha
+            # Criamos os dados exatamente na ordem da planilha: Nome, Categoria, Resposta, Data
             nova_linha = pd.DataFrame([{
                 "Nome": nome_input, 
                 "Categoria": cat_input, 
@@ -67,16 +68,17 @@ if botao_enviar:
             }])
 
             try:
-                # O método 'append' é o mais estável para formulários técnicos
-                # Ele ignora se há linhas vazias no meio da planilha
-                conn.append(spreadsheet=url, data=nova_linha)
+                # O comando .create() atua como um 'Append' quando a planilha já existe
+                # É mais estável que o .update() para formulários
+                conn.create(spreadsheet=url, data=nova_linha)
                 
                 st.balloons()
                 st.success("✅ Resposta salva com sucesso!")
             except Exception as e:
-                st.error("Erro técnico: Verifique se o e-mail da conta de serviço tem permissão de 'Editor' na planilha.")
+                st.error("Erro ao salvar: Verifique se o e-mail da Service Account está como EDITOR.")
+                # st.write(e) # Descomente esta linha se precisar ver o erro técnico exato
     else:
-        st.error("⚠️ Por favor, preencha todos os campos antes de enviar.")
+        st.error("⚠️ Preencha todos os campos.")
 
 # 5. Imagem da Equipe com o novo parâmetro 'width'
 # Substituindo use_container_width=True por width='stretch'
