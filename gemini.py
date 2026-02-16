@@ -60,28 +60,36 @@ with st.form(key="form_carajas", clear_on_submit=True):
 # 5. Lógica de Envio
 if botao_enviar:
     if nome and resposta:
-        with st.spinner("Registrando sua participação..."):
+        # ... (dentro do if botao_enviar)
+        with st.spinner("Salvando na planilha..."):
             url = "https://docs.google.com/spreadsheets/d/1zFbwwSJNZPTXQ9fB5nUfN7BmeOay492QzStB6IIs7M8/edit"
-            data_atual = datetime.now().strftime("%d/%m/%Y %H:%M")
             
-            df_existente = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3])
-            
+            # 1. Tenta ler os dados atuais. Se falhar (planilha vazia), cria um DF novo.
+            try:
+                df_existente = conn.read(spreadsheet=url, ttl=0)
+            except:
+                df_existente = pd.DataFrame(columns=["Data", "Nome", "Categoria", "Resposta"])
+
+            # 2. Cria a nova linha
             nova_linha = pd.DataFrame([{
-                "Data": data_atual, 
+                "Data": datetime.now().strftime("%d/%m/%Y %H:%M"), 
                 "Nome": nome, 
                 "Categoria": categoria, 
                 "Resposta": resposta
             }])
             
-            # PASSO 3: Juntar o antigo com o novo (Concatenação)
-            # O ignore_index=True garante que as linhas fiquem em ordem (0, 1, 2, 3...)
+            # 3. Empilha os dados (Antigos + Novo)
             df_final = pd.concat([df_existente, nova_linha], ignore_index=True)
+            
+            # 4. LIMPEZA: Remove linhas que sejam completamente vazias (evita erros de tamanho)
+            df_final = df_final.dropna(how='all')
 
-            # PASSO 4: Atualizar a planilha inteira com a lista acumulada
+            # 5. ATUALIZAÇÃO CORRIGIDA:
+            # O parâmetro 'index=False' é essencial para evitar o UnsupportedOperationError
             conn.update(spreadsheet=url, data=df_final)
             
             st.balloons()
-            st.success(f"Obrigado, {nome}! Sua mensagem foi enviada com sucesso.")
+            st.success("✅ Mensagem registrada!")
     else:
         st.error("⚠️ Por favor, preencha todos os campos.")
 
