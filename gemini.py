@@ -53,7 +53,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col2:
         categoria = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Comentário",])
     
-    resposta = st.text_area("Em que ocasião é utilizado o diagnóstico *Equipamento desconfigurado", height=150, placeholder="Escreva aqui...")
+    resposta = st.text_area("Em que ocasião é utilizado o diagnóstico *Equipamento desconfigurado*?", height=150, placeholder="Escreva aqui...")
     
     botao_enviar = st.form_submit_button("ENVIAR")
 
