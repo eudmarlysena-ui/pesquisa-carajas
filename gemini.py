@@ -102,7 +102,7 @@ try:
 
         # Tabela expansível com o histórico
         with st.expander("📄 Ver histórico completo de mensagens"):
-            st.dataframe(df_resumo[['Data', 'Nome', 'Categoria', 'Resposta']], width='stretch')
+            st.dataframe(df_resumo[['Nome', 'Categoria', 'Resposta', 'Data']], width='stretch')
             
     else:
         st.info("O resumo aparecerá aqui assim que os dados da planilha forem carregados.")
