@@ -71,23 +71,25 @@ else:
     st.info("Carregando imagem da equipe...")
 
 # 7. Painel de Resumo das Respostas (Dashboard)
-# 7. Painel de Resumo das Respostas (Dashboard)
 st.write("---")
 st.subheader("📊 Resumo da Colaboração")
 
+# Força o Streamlit a esquecer os dados antigos a cada carregamento
+st.cache_data.clear() 
+
 try:
-    # Lê os dados mais recentes da planilha (ttl=0 força a leitura sem cache)
+    # ttl=0 é fundamental para ignorar o cache do servidor público
     df_resumo = conn.read(spreadsheet=url, ttl=0)
     
-    # Limpa linhas vazias que podem atrapalhar a contagem
-    df_resumo = df_resumo.dropna(subset=['Categoria'])
+    # Limpa a "sujeira" da planilha (remove linhas onde o Nome está em branco)
+    df_resumo = df_resumo.dropna(subset=['Nome'])
     
     if not df_resumo.empty:
         col_graf1, col_graf2 = st.columns([2, 1])
         
         with col_graf1:
             st.write("**Distribuição por Tipo de Contato**")
-            # Conta as ocorrências de cada categoria (Resposta, Sugestão, etc)
+            # Agrupa e conta os dados
             contagem = df_resumo['Categoria'].value_counts()
             st.bar_chart(contagem, color="#00bfff")
             
@@ -96,16 +98,16 @@ try:
             total_mensagens = len(df_resumo)
             st.metric(label="Total de Feedbacks", value=total_mensagens)
             
-            # Exibe quem foi o último a colaborar
+            # Pega o último nome da lista real
             ultimo_nome = df_resumo['Nome'].iloc[-1]
             st.caption(f"Última colaboração: {ultimo_nome}")
 
-        # Tabela expansível com o histórico
-        with st.expander("📄 Ver histórico completo de mensagens"):
-            st.dataframe(df_resumo[['Nome', 'Categoria', 'Resposta', 'Data']], width='stretch')
+        # Tabela expansível
+        with st.expander("📄 Ver histórico completo"):
+            st.dataframe(df_resumo[['Data', 'Nome', 'Categoria', 'Resposta']], width='stretch')
             
     else:
-        st.info("O resumo aparecerá aqui assim que os dados da planilha forem carregados.")
+        st.info("O resumo aparecerá aqui assim que os dados forem validados.")
 
 except Exception as e:
-    st.warning("Aguardando sincronização com a planilha para gerar os gráficos.")
+    st.warning("Sincronizando com a planilha... Se demorar, verifique se há dados na aba principal.")
