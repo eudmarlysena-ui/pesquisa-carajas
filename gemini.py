@@ -69,3 +69,37 @@ if os.path.exists(caminho_foto):
     st.image(img_carregada, width='stretch', caption="Equipe CarajásNet - Agentes de Fidelização")
 else:
     st.info("Carregando imagem da equipe...")
+
+# 7. Painel de Resumo das Respostas (Dashboard)
+st.write("---")
+st.subheader("📊 Resumo de Atendimentos")
+
+try:
+    # Lê os dados mais recentes da planilha
+    df_resumo = conn.read(spreadsheet=url, ttl=0)
+    
+    if not df_resumo.empty:
+        # 1. Gráfico por Categoria
+        contagem_categorias = df_resumo['Categoria'].value_counts()
+        
+        col_graf1, col_graf2 = st.columns(2)
+        
+        with col_graf1:
+            st.write("**Distribuição por Tipo**")
+            # Cria um gráfico de barras simples e elegante
+            st.bar_chart(contagem_categorias, color="#00bfff")
+            
+        with col_graf2:
+            st.write("**Total de Registros**")
+            total = len(df_resumo)
+            st.metric(label="Mensagens Recebidas", value=total, delta=f"+ {len(nova_linha)}" if botao_enviar else None)
+            
+        # 2. Tabela de Últimas Respostas (opcional, para visualização rápida)
+        with st.expander("Ver últimas mensagens recebidas"):
+            st.dataframe(df_resumo.tail(5)[['Data', 'Nome', 'Categoria']], use_container_width=True)
+            
+    else:
+        st.info("Ainda não há dados suficientes para gerar o resumo.")
+
+except Exception as e:
+    st.write("O resumo será exibido assim que os primeiros dados forem processados.")
