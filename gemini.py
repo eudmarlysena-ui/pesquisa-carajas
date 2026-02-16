@@ -51,7 +51,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col1:
         nome = st.text_input("NOME COMPLETO", placeholder="Digite seu nome completo")
     with col2:
-        categoria = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Dica",])
+        categoria = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Comentário",])
     
     resposta = st.text_area("Em que ocasião é utilizado o diagnóstico *Equipamento desconfigurado", height=150, placeholder="Escreva aqui...")
     
