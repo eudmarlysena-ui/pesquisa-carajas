@@ -6,7 +6,7 @@ from datetime import datetime
 # 1. Configuração da página
 st.set_page_config(page_title="Soluções - Equipe Técnica", page_icon="🔵", layout="centered")
 
-# 2. CSS Customizado (Fundo escuro conforme seu código anterior)
+# 2. Estilo Visual (Fundo Escuro e Letras Claras)
 st.markdown("""
     <style>
     .stApp { background-color: #4c4c4c; }
@@ -40,43 +40,51 @@ st.title("🔵 Soluções - Equipe Técnica")
 # Conexão
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# 4. Formulário
+# 3. Formulário
 with st.form(key="form_carajas", clear_on_submit=True):
     col1, col2 = st.columns([2, 1])
-    
     with col1:
-        nome = st.text_input("NOME COMPLETO", placeholder="Digite seu nome")
+        nome_input = st.text_input("NOME COMPLETO", placeholder="Digite seu nome")
     with col2:
-        categoria = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Comentário"])
+        cat_input = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Comentário"])
     
-    pergunta = "Em que ocasião é utilizado o diagnóstico *Equipamento desconfigurado*?"
-    resposta = st.text_area(pergunta, height=150, placeholder="Escreva aqui...")
-    
+    resp_input = st.text_area("Em que ocasião é utilizado o diagnóstico Equipamento desconfigurado?", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
 
-# 5. Lógica de Envio (Ordem: Nome, Categoria, Resposta, Data)
+# 4. Lógica de Envio Ajustada
 if botao_enviar:
-    if nome and resposta:
-        with st.spinner("Enviando resposta..."):
+    if nome_input and resp_input:
+        with st.spinner("Enviando para a planilha..."):
             url = "https://docs.google.com/spreadsheets/d/1zFbwwSJNZPTXQ9fB5nUfN7BmeOay492QzStB6IIs7M8/edit"
             
-            # Criando o DataFrame na ordem exata da sua planilha
+            # Criamos o DataFrame com a ordem EXATA das suas colunas (A, B, C, D)
             nova_linha = pd.DataFrame([{
-                "Nome": nome, 
-                "Categoria": categoria, 
-                "Resposta": resposta,
+                "Nome": nome_input, 
+                "Categoria": cat_input, 
+                "Resposta": resp_input,
                 "Data": datetime.now().strftime("%d/%m/%Y %H:%M")
             }])
 
             try:
-                # Usamos o create para anexar a linha ao final
-                conn.create(spreadsheet=url, data=nova_linha)
+                # PASSO 1: Lê o que já existe (ttl=0 para não usar cache)
+                df_atual = conn.read(spreadsheet=url, ttl=0)
+                
+                # PASSO 2: Remove linhas totalmente vazias que o Google Sheets costuma enviar
+                df_atual = df_atual.dropna(how='all')
+                
+                # PASSO 3: Junta com a nova resposta
+                df_final = pd.concat([df_atual, nova_linha], ignore_index=True)
+                
+                # PASSO 4: Atualiza a planilha (index=False remove a coluna de números do Pandas)
+                conn.update(spreadsheet=url, data=df_final)
+                
                 st.balloons()
-                st.success("✅ Registrado com sucesso na planilha!")
+                st.success("✅ Resposta salva com sucesso!")
             except Exception as e:
-                st.error("Erro técnico ao salvar. Verifique se a planilha tem os cabeçalhos corretos.")
+                st.error("Erro técnico ao salvar. Verifique se o cabeçalho na Linha 1 é: Nome, Categoria, Resposta, Data")
     else:
-        st.error("⚠️ Preencha nome e resposta antes de enviar.")
+        st.error("⚠️ Por favor, preencha todos os campos.")
 
 st.write("---")
+# Legenda em azul configurada no CSS acima
 st.image("equipe.jpg", use_container_width=True, caption="Equipe CarajásNet - Agentes de Fidelização")
