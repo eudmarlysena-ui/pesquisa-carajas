@@ -33,7 +33,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
         
     placa_input = st.text_input("PLACA DO VEICULO / CILINDRADA")
         
-    modelo_input = st.text_input("modelo")    
+    modelo_input = st.text_input("MODELO")    
     
     resp_input = st.text_area("FAÇA UMA DESCRIÇÃO DO ESTADO DA MOTO.", height=100)
     botao_enviar = st.form_submit_button("ENVIAR")
