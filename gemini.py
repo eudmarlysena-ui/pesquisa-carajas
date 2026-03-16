@@ -29,9 +29,9 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col1:
         nome_input = st.text_input("NOME COMPLETO")
     with col2:
-        cat_input = st.selectbox("TIPO DE CONTATO", ["Resposta", "Sugestão", "Comentário"])
+        cat_input = st.selectbox("TIPO DE CONTATO", ["Opinião", "Sugestão", "Crítica"])
     
-    resp_input = st.text_area("Em que ocasião é utilizado o diagnóstico Equipamento desconfigurado?", height=150)
+    resp_input = st.text_area("Deixe seu comentário abaixo", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
 
 # 3. Lógica de Envio
