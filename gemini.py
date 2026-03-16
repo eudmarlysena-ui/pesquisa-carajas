@@ -30,10 +30,12 @@ with st.form(key="form_carajas", clear_on_submit=True):
         nome_input = st.text_input("NOME COMPLETO")
     with col2:
         cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
-    with col3:    
-        placa_input = st.text_input("PLACA DO VEICULO / CILINDRADA")
+        
+    placa_input = st.text_input("PLACA DO VEICULO / CILINDRADA")
+        
+    modelo_input = st.text_input("modelo")    
     
-    resp_input = st.text_area("FAÇA UMA DESCRIÇÃO DO ESTADO DA MOTO.", height=150)
+    resp_input = st.text_area("FAÇA UMA DESCRIÇÃO DO ESTADO DA MOTO.", height=100)
     botao_enviar = st.form_submit_button("ENVIAR")
 
 # 3. Lógica de Envio
