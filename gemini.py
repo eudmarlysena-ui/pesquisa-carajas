@@ -29,9 +29,11 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col1:
         nome_input = st.text_input("NOME COMPLETO")
     with col2:
-        cat_input = st.selectbox("TIPO DE CONTATO", ["Opinião", "Sugestão", "Crítica"])
+        cat_input = st.selectbox("", ["Carburada", "Injetada"])
+    with col3:    
+        placa - st.text_input("PLACA DO VEICULO")
     
-    resp_input = st.text_area("Deixe seu comentário abaixo", height=150)
+    resp_input = st.text_area("Faça um descrição do estado atual e qual a cilindrada.", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
 
 # 3. Lógica de Envio
@@ -42,7 +44,7 @@ if botao_enviar:
             
             nova_linha = pd.DataFrame([{
                 "Nome": nome_input, 
-                "Categoria": cat_input, 
+                "Placa": cat_input, 
                 "Resposta": resp_input,
                 "Data": datetime.now().strftime("%d/%m/%Y %H:%M")
             }])
@@ -90,7 +92,7 @@ try:
         with col_graf1:
             st.write("**Distribuição por Tipo de Contato**")
             # Agrupa e conta os dados
-            contagem = df_resumo['Categoria'].value_counts()
+            contagem = df_resumo['Placa'].value_counts()
             st.bar_chart(contagem, color="#00bfff")
             
         with col_graf2:
@@ -104,7 +106,7 @@ try:
 
         # Tabela expansível
         with st.expander("📄 Ver histórico completo"):
-            st.dataframe(df_resumo[['Data', 'Nome', 'Categoria', 'Resposta']], width='stretch')
+            st.dataframe(df_resumo[['Data', 'Nome', 'Placa', 'Resposta']], width='stretch')
             
     else:
         st.info("O resumo aparecerá aqui assim que os dados forem validados.")
