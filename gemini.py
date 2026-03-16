@@ -48,6 +48,7 @@ if botao_enviar:
                 "Nome": nome_input, 
                 "Placa": cat_input, 
                 "Resposta": resp_input,
+                "Modelo": modelo_imput,
                 "Data": datetime.now().strftime("%d/%m/%Y %H:%M")
             }])
 
@@ -108,7 +109,7 @@ try:
 
         # Tabela expansível
         with st.expander("📄 Ver histórico completo"):
-            st.dataframe(df_resumo[['Data', 'Nome', 'Placa', 'Resposta']], width='stretch')
+            st.dataframe(df_resumo[['Data', 'Nome', 'Placa', 'Modelo', 'Resposta']], width='stretch')
             
     else:
         st.info("O resumo aparecerá aqui assim que os dados forem validados.")
