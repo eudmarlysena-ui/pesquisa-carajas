@@ -48,7 +48,7 @@ if botao_enviar:
                 "Nome": nome_input, 
                 "Placa": cat_input, 
                 "Resposta": resp_input,
-                "Modelo": modelo_imput,
+                "Modelo": modelo_input,
                 "Data": datetime.now().strftime("%d/%m/%Y %H:%M")
             }])
 
