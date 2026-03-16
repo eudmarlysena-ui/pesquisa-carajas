@@ -29,7 +29,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col1:
         nome_input = st.text_input("NOME COMPLETO")
     with col2:
-        cat_input = st.selectbox("Selecionar", ["Carburada", "Injetada"])
+        cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
     with col3:    
         placa_input = st.text_input("PLACA DO VEICULO / CILINDRADA")
     
