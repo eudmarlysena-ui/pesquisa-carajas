@@ -31,7 +31,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
     with col2:
         cat_input = st.selectbox("", ["Carburada", "Injetada"])
     with col3:    
-        placa - st.text_input("PLACA DO VEICULO")
+        placa_input = st.text_input("PLACA DO VEICULO")
     
     resp_input = st.text_area("Faça um descrição do estado atual e qual a cilindrada.", height=150)
     botao_enviar = st.form_submit_button("ENVIAR")
