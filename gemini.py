@@ -13,7 +13,7 @@ st.markdown("""
     .stApp { background-color: #4c4c4c; }
     [data-testid="stForm"] { background-color: #4c4c4c; border: 2px solid #0056b3; border-radius: 15px; padding: 20px; }
     h1, h2, h3, p, span, label { color: white !important; }
-    .stButton>button { width: 100%; border-radius: 8px; height: 3.5em; background-color: #0056b3; color: white; font-weight: bold; border: none; }
+    .stButton>button { width: 150%; border-radius: 8px; height: 3.5em; background-color: #0056b3; color: white; font-weight: bold; border: none; }
     [data-testid="stImageCaption"] { color: #00bfff !important; font-weight: bold; text-align: center; font-size: 1.1rem; }
     </style>
     """, unsafe_allow_html=True)
