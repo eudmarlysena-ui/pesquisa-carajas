@@ -19,7 +19,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.title("🔵 Soluções - Equipe Técnica")
-st.subheader("Sugira correção ou acréscimo sobre os tópicos: Assunto e Diagnóstico")
+st.subheader("⚠️Sugira correção ou acréscimo sobre os tópicos: Assunto e Diagnóstico")
 
 # Conexão
 conn = st.connection("gsheets", type=GSheetsConnection)
