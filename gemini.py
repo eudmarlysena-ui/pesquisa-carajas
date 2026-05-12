@@ -27,8 +27,10 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 # 2. Formulário
 with st.form(key="form_carajas", clear_on_submit=True):
     col1, col2, col3 = st.columns([3, 2, 1])
-    with col1:
-        nome_input = st.text_input("NOME COMPLETO")
+    
+    nome_input = st.text_input("NOME COMPLETO")
+  #  with col1:
+   #     nome_input = st.text_input("NOME COMPLETO")
 #    with col2:
  #       cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
         
