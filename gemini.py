@@ -28,14 +28,14 @@ with st.form(key="form_carajas", clear_on_submit=True):
     col1, col2, col3 = st.columns([3, 2, 1])
     with col1:
         nome_input = st.text_input("NOME COMPLETO")
-    with col2:
-        cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
+#    with col2:
+ #       cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
         
-    placa_input = st.text_input("PLACA DO VEICULO / CILINDRADA")
+    placa_input = st.text_input("ASSUNTO")
         
-    modelo_input = st.text_input("MODELO")    
+    modelo_input = st.text_input("DIAGÓSTICO")    
     
-    resp_input = st.text_area("FAÇA UMA DESCRIÇÃO DO ESTADO DA MOTO.", height=100)
+    resp_input = st.text_area("COMENTÁRIO/JUSTIFICATIVA.", height=100)
     botao_enviar = st.form_submit_button("ENVIAR")
 
 # 3. Lógica de Envio
@@ -46,9 +46,9 @@ if botao_enviar:
             
             nova_linha = pd.DataFrame([{
                 "Nome": nome_input, 
-                "Placa": cat_input, 
-                "Resposta": resp_input,
-                "Modelo": modelo_input,
+                "Assunto": cat_input, 
+                "Comentário": resp_input,
+                "Diagnóstico": modelo_input,
                 "Data": datetime.now().strftime("%d/%m/%Y %H:%M")
             }])
 
