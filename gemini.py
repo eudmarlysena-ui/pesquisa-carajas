@@ -32,7 +32,7 @@ with st.form(key="form_carajas", clear_on_submit=True):
 #    with col2:
  #       cat_input = st.selectbox("Selecionar", ["", "Carburada", "Injetada"])
         
-    placa_input = st.text_input("ASSUNTO")
+    cat_input = st.text_input("ASSUNTO")
         
     modelo_input = st.text_input("DIAGÓSTICO")    
     
